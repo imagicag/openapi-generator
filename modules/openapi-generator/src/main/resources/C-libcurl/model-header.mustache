@@ -23,7 +23,7 @@ typedef struct {{classname}}_t {{classname}}_t;
 {{#allowableValues}}
 // Enum {{enumName}} for {{classVarName}}
 
-typedef enum { {{projectName}}_{{classVarName}}_{{enumName}}_NULL = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
+typedef enum { {{projectName}}_{{classVarName}}_{{enumName}}_NULL_ = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
 {{/allowableValues}}
 
 char* {{classFilename}}_{{classname}}_ToString({{projectName}}_{{classVarName}}_{{enumName}}_e {{classname}});
@@ -43,7 +43,7 @@ char* {{classFilename}}_{{classname}}_ToString({{projectName}}_{{classVarName}}_
 // Enum {{enumName}} for {{classVarName}}
 
         {{#allowableValues}}
-typedef enum  { {{projectName}}_{{classVarName}}_{{enumName}}_NULL = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
+typedef enum  { {{projectName}}_{{classVarName}}_{{enumName}}_NULL_ = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
         {{/allowableValues}}
 
 char* {{classFilename}}_{{name}}_ToString({{projectName}}_{{classVarName}}_{{enumName}}_e {{name}});
@@ -60,7 +60,7 @@ char* {{classFilename}}_{{name}}_ToString({{projectName}}_{{classVarName}}_{{enu
 // Enum {{enumName}} for {{classVarName}}
 
             {{#allowableValues}}
-typedef enum  { {{projectName}}_{{classVarName}}_{{enumName}}_NULL = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
+typedef enum  { {{projectName}}_{{classVarName}}_{{enumName}}_NULL_ = 0{{#enumVars}}, {{projectName}}_{{classVarName}}_{{enumName}}_{{{value}}}{{/enumVars}} } {{projectName}}_{{classVarName}}_{{enumName}}_e;
             {{/allowableValues}}
 
 char* {{classFilename}}_{{name}}_ToString({{projectName}}_{{classVarName}}_{{enumName}}_e {{name}});
