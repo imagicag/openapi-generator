@@ -508,11 +508,11 @@ cJSON *{{classname}}_convertToJSON({{classname}}_t *{{classname}}) {
     {{/isPrimitiveType}}
     {{/isArray}}
     {{#isMap}}
-    cJSON *{{{name}}} = cJSON_AddObjectToObject(item, "{{{baseName}}}");
-    if({{{name}}} == NULL) {
+    cJSON *{{{name}}}_local_JSON = cJSON_AddObjectToObject(item, "{{{baseName}}}");
+    if({{{name}}}_local_JSON == NULL) {
         goto fail; //primitive map container
     }
-    cJSON *localMapObject = {{{name}}};
+    cJSON *localMapObject = {{{name}}}_local_JSON;
     listEntry_t *{{{name}}}ListEntry;
     if ({{{classname}}}->{{{name}}}) {
     list_ForEach({{{name}}}ListEntry, {{{classname}}}->{{{name}}}) {
