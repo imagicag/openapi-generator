@@ -16,6 +16,7 @@ apiClient_t *apiClient_create() {
     apiClient->progress_func = NULL;
     apiClient->progress_data = NULL;
     apiClient->response_code = 0;
+    apiClient->response_text = strdup("");
     {{#hasAuthMethods}}
     {{#authMethods}}
     {{#isBasicBasic}}
@@ -63,6 +64,7 @@ apiClient_t *apiClient_create_with_base_path(const char *basePath
     apiClient->progress_func = NULL;
     apiClient->progress_data = NULL;
     apiClient->response_code = 0;
+    apiClient->response_text = strdup("");
     {{#hasAuthMethods}}
     {{#authMethods}}
     {{#isBasicBasic}}
@@ -98,6 +100,9 @@ void apiClient_free(apiClient_t *apiClient) {
     apiClient->data_callback_func = NULL;
     apiClient->progress_func = NULL;
     apiClient->progress_data = NULL;
+    if(apiClient->response_text) {
+        free(apiClient->response_text);
+    }
     {{#hasAuthMethods}}
     {{#authMethods}}
     {{#isBasicBasic}}
@@ -534,6 +539,10 @@ void apiClient_invoke(apiClient_t    *apiClient,
 
         free(targetUrl);
 
+        if (apiClient->response_text) {
+            free(apiClient->response_text);
+        }
+        apiClient->response_text = strdup(curl_easy_strerror(res));
         if(res == CURLE_OK) {
             curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &apiClient->response_code);
         } else {
