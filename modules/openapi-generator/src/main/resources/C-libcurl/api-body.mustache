@@ -64,10 +64,17 @@ static {{projectName}}_{{operationId}}_{{baseName}}_e {{{operationId}}}_{{enumNa
     {{projectName}}_{{operationId}}_{{baseName}}_e {{enumName}}Variable = 0;
 {{#isNumeric}}
     cJSON *{{{enumName}}}Var = cJSON_GetObjectItemCaseSensitive({{enumName}}JSON, "{{{paramName}}}");
-    if(!cJSON_IsNumber({{{enumName}}}Var))
-    {
-        goto end;
+    {{^isRequired}}
+    if (!cJSON_IsNull({{{enumName}}}Var)) {
+    {{/isRequired}}
+        if(!cJSON_IsNumber({{{enumName}}}Var)) {
+            goto end;
+        }
+    {{^isRequired}}
+    } else {
+        {{{enumName}}}Var = NULL;
     }
+    {{/isRequired}}
 {{/isNumeric}}
 {{#isString}}
     cJSON *{{{enumName}}}Var = cJSON_GetObjectItemCaseSensitive({{enumName}}JSON, "{{{paramName}}}");

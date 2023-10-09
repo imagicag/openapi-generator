@@ -53,10 +53,17 @@ fail:
 {{#isEnum}}
 {{#isNumeric}}
     cJSON *{{{classname}}}Var = cJSON_GetObjectItemCaseSensitive({{classname}}JSON, "{{{classname}}}");
-    if(!cJSON_IsNumber({{{classname}}}Var))
-    {
-        goto end;
-    }
+    {{^isRequired}}
+    if (!cJSON_IsNull({{{classname}}}Var)) {
+    {{/isRequired}}
+        if(!cJSON_IsNumber({{{classname}}}Var)) {
+            goto end;
+        }
+    {{^isRequired}}
+        } else {
+            {{{classname}}}Var = NULL;
+        }
+    {{/isRequired}}
 {{/isNumeric}}
 {{#isString}}
     {{projectName}}_{{classVarName}}_{{enumName}}_e {{classname}}Variable;
@@ -609,10 +616,17 @@ fail:
     {{#isPrimitiveType}}
     {{#isNumeric}}
     {{^required}}if ({{{name}}}) { {{/required}}
-    if(!cJSON_IsNumber({{{name}}}))
-    {
-    goto end; //Numeric
-    }
+    {{^isRequired}}
+        if (!cJSON_IsNull({{{name}}})) {
+    {{/isRequired}}
+            if(!cJSON_IsNumber({{{name}}})) {
+                goto end; //Numeric
+            }
+    {{^isRequired}}
+        } else {
+            {{{name}}} = NULL;
+        }
+    {{/isRequired}}
     {{/isNumeric}}
     {{#isBoolean}}
     {{^required}}if ({{{name}}}) { {{/required}}
