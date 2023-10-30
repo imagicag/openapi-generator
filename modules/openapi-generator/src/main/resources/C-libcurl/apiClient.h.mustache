@@ -22,6 +22,8 @@ typedef struct sslConfig_t {
 typedef struct apiClient_t {
     char *basePath;
     sslConfig_t *sslConfig;
+    struct curl_slist*(*headers_callback_func) (struct curl_slist* headers, const void* headers_context);
+    void* headers_context;
     void *dataReceived;
     long dataReceivedLen;
     void (*data_callback_func)(void **, long *);

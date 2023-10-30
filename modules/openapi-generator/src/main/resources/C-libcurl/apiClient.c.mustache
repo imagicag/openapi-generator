@@ -10,6 +10,8 @@ apiClient_t *apiClient_create() {
     apiClient_t *apiClient = malloc(sizeof(apiClient_t));
     apiClient->basePath = strdup("{{{basePath}}}");
     apiClient->sslConfig = NULL;
+    apiClient->headers_callback_func = NULL;
+    apiClient->headers_context = NULL;
     apiClient->dataReceived = NULL;
     apiClient->dataReceivedLen = 0;
     apiClient->data_callback_func = NULL;
@@ -57,7 +59,8 @@ apiClient_t *apiClient_create_with_base_path(const char *basePath
     }else{
         apiClient->sslConfig = NULL;
     }
-
+    apiClient->headers_callback_func = NULL;
+    apiClient->headers_context = NULL;
     apiClient->dataReceived = NULL;
     apiClient->dataReceivedLen = 0;
     apiClient->data_callback_func = NULL;
@@ -474,6 +477,10 @@ void apiClient_invoke(apiClient_t    *apiClient,
         {{/isApiKey}}
         {{/authMethods}}
         {{/hasAuthMethods}}
+
+        if (apiClient->headers_callback_func) {
+            headers = apiClient->headers_callback_func(headers, apiClient->headers_context);
+        }
 
         char *targetUrl =
             assembleTargetUrl(apiClient->basePath,
