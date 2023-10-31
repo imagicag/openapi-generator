@@ -159,8 +159,13 @@ char* {{classname}}_{{name}}_ToString({{projectName}}_{{classVarName}}_{{enumNam
     {{/isFreeFormObject}}
     {{/isPrimitiveType}}
     {{#isPrimitiveType}}
+    {{#isLong}}
+    int64_t {{name}}{{^-last}},{{/-last}}
+    {{/isLong}}
     {{#isNumeric}}
+    {{^isLong}}
     {{datatype}} {{name}}{{^-last}},{{/-last}}
+    {{/isLong}}
     {{/isNumeric}}
     {{#isBoolean}}
     {{datatype}} {{name}}{{^-last}},{{/-last}}

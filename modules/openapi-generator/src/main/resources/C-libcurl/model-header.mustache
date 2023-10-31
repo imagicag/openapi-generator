@@ -102,8 +102,13 @@ typedef struct {{classname}}_t {
     {{/isFreeFormObject}}
     {{/isPrimitiveType}}
     {{#isPrimitiveType}}
+    {{#isLong}}
+    int64_t {{name}}; //numeric
+    {{/isLong}}
     {{#isNumeric}}
+    {{^isLong}}
     {{datatype}} {{name}}; //numeric
+    {{/isLong}}
     {{/isNumeric}}
     {{#isBoolean}}
     {{datatype}} {{name}}; //boolean
@@ -177,8 +182,13 @@ typedef struct {{classname}}_t {
     {{/isFreeFormObject}}
     {{/isPrimitiveType}}
     {{#isPrimitiveType}}
+    {{#isLong}}
+    int64_t {{name}}{{^-last}},{{/-last}}
+    {{/isLong}}
     {{#isNumeric}}
+    {{^isLong}}
     {{datatype}} {{name}}{{^-last}},{{/-last}}
+    {{/isLong}}
     {{/isNumeric}}
     {{#isBoolean}}
     {{datatype}} {{name}}{{^-last}},{{/-last}}
