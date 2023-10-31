@@ -231,7 +231,7 @@ char *assembleTargetUrl(const char  *basePath,
     return targetUrl;
 }
 
-char *assembleHeaderField(char *key, char *value) {
+char *assembleHeaderField(const char *key, const char *value) {
     char *header = malloc(strlen(key) + strlen(value) + 3);
 
     strcpy(header, key),

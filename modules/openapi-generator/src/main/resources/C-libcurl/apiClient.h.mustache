@@ -68,7 +68,7 @@ sslConfig_t *sslConfig_create(const char *clientCertFile, const char *clientKeyF
 
 void sslConfig_free(sslConfig_t *sslConfig);
 
-char *strReplace(char *orig, char *rep, char *with);
+char *strReplace(const char *orig, const char *rep, const char *with);
 
 /*
  * In single thread program, the function apiClient_setupGlobalEnv is not needed.
