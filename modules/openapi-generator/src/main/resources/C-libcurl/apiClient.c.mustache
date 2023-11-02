@@ -549,26 +549,41 @@ void apiClient_invoke(apiClient_t    *apiClient,
         if (apiClient->response_text) {
             free(apiClient->response_text);
         }
-        apiClient->response_text = strdup(curl_easy_strerror(res));
-        if(res == CURLE_OK) {
+        if (res == CURLE_OK) {
             curl_easy_getinfo(handle, CURLINFO_RESPONSE_CODE, &apiClient->response_code);
+            if (apiClient->response_code < 200 || apiClient->response_code > 299) {
+                char* curlInfoContentType;
+                if (CURLE_OK == curl_easy_getinfo(handle, CURLINFO_CONTENT_TYPE, &curlInfoContentType)) {
+                    if (curlInfoContentType && strstr(curlInfoContentType, "text/plain") != NULL) {
+                        apiClient->response_text = strdup(apiClient->dataReceived);
+                    } else {
+                        apiClient->response_text = strdup(curl_easy_strerror(res));
+                    }
+                } else {
+                    apiClient->response_text = strdup(curl_easy_strerror(res));
+                }
+            } else {
+                apiClient->response_text = strdup(curl_easy_strerror(res));
+            }
         } else {
-            char *url,*ip,*scheme;
+            char *url,*ip,*scheme,*error;
             long port;
             curl_easy_getinfo(handle, CURLINFO_EFFECTIVE_URL, &url);
             curl_easy_getinfo(handle, CURLINFO_PRIMARY_IP, &ip);
             curl_easy_getinfo(handle, CURLINFO_PRIMARY_PORT, &port);
             curl_easy_getinfo(handle, CURLINFO_SCHEME, &scheme);
-            fprintf(stderr, "curl_easy_perform() failed\n\nURL: %s\nIP: %s\nPORT: %li\nSCHEME: %s\nStrERROR: %s\n",url,ip,port,scheme,
-            curl_easy_strerror(res));
+            error = curl_easy_strerror(res);
+            fprintf(stderr, "curl_easy_perform() failed\n\nURL: %s\nIP: %s\nPORT: %li\nSCHEME: %s\nStrERROR: %s\n",url,ip,port,scheme, error);
+            apiClient->response_code = res;
+            apiClient->response_text = strdup(error);
         }
         {{#hasAuthMethods}}
         {{#authMethods}}
         {{#isBasicBasic}}
-        if((apiClient->username != NULL) &&
-        (apiClient->password != NULL) )
+        if ((apiClient->username != NULL) &&
+            (apiClient->password != NULL) )
         {
-        free(authenticationToken);
+            free(authenticationToken);
         }
         {{/isBasicBasic}}
         {{/authMethods}}
