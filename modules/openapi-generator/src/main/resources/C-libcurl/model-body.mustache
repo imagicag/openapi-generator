@@ -813,7 +813,7 @@ fail:
             cJSON *localMapObject = {{{name}}}_local_map;
             {{#items}}
             {{#isString}}
-            if(!cJSON_IsString(localMapObject))
+            if(!cJSON_IsOptionalString(localMapObject))
             {
                 goto end;
             }

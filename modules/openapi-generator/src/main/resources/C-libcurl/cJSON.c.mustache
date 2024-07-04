@@ -2796,6 +2796,11 @@ CJSON_PUBLIC(cJSON_bool) cJSON_IsRaw(const cJSON * const item)
     return (item->type & 0xFF) == cJSON_Raw;
 }
 
+CJSON_PUBLIC(cJSON_bool) cJSON_IsOptionalString(const cJSON * const item)
+{
+    return cJSON_IsString(item) || cJSON_IsNull(item);
+}
+
 CJSON_PUBLIC(cJSON_bool) cJSON_Compare(const cJSON * const a, const cJSON * const b, const cJSON_bool case_sensitive)
 {
     if ((a == NULL) || (b == NULL) || ((a->type & 0xFF) != (b->type & 0xFF)) || cJSON_IsInvalid(a))
