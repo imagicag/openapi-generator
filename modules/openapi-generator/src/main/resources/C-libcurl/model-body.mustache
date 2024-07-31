@@ -846,9 +846,19 @@ fail:
     }
     {{/isPrimitiveType}}
     {{^isPrimitiveType}}
-
-    // The data type of the elements in {{{classname}}}->{{{name}}} is currently not supported.
-
+        // Interpret as array of objects
+        if (!cJSON_IsObject({{{name}}})) {
+            return NULL; // primitive container
+        }
+        {{{name}}}List = list_createList();
+        cJSON* VarJSON;
+        keyValuePair_t *localMapKeyPair;
+        cJSON_ArrayForEach(VarJSON, {{{name}}}) {
+            char* localVarJSONToChar = cJSON_Print(VarJSON);
+            localMapKeyPair = keyValuePair_create(strdup(VarJSON->string), localVarJSONToChar);
+            list_addElement({{{name}}}List, localMapKeyPair);
+        }
+        cJSON_Delete(VarJSON);
     {{/isPrimitiveType}}
     {{/isMap}}
     {{/isContainer}}
