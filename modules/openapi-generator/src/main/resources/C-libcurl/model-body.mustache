@@ -840,25 +840,35 @@ fail:
             }
             localMapKeyPair = keyValuePair_create(strdup(localMapObject->string),&localMapObject->valuedouble );
             {{/isNumeric}}
+            {{#isFreeFormObject}}
+            cJSON* freeformObject = cJSON_Duplicate(localMapObject, cJSON_True);
+            localMapKeyPair = keyValuePair_create(strdup(localMapObject->string), freeformObject);
+            {{/isFreeFormObject}}
             {{/items}}
-            list_addElement({{{name}}}List , localMapKeyPair);
+            list_addElement({{{name}}}List, localMapKeyPair);
         }
     }
     {{/isPrimitiveType}}
     {{^isPrimitiveType}}
         // Interpret as array of objects
-        if (!cJSON_IsObject({{{name}}})) {
-            return NULL; // primitive container
+        {{^required}}
+        if(!cJSON_IsNull({{{name}}})) {
+        {{/required}}
+            if (!cJSON_IsObject({{{name}}})) {
+                return NULL; // primitive container
+            }
+            {{{name}}}List = list_createList();
+            cJSON* VarJSON;
+            keyValuePair_t *localMapKeyPair;
+            cJSON_ArrayForEach(VarJSON, {{{name}}}) {
+                char* localVarJSONToChar = cJSON_Print(VarJSON);
+                localMapKeyPair = keyValuePair_create(strdup(VarJSON->string), localVarJSONToChar);
+                list_addElement({{{name}}}List, localMapKeyPair);
+            }
+            cJSON_Delete(VarJSON);
+        {{^required}}
         }
-        {{{name}}}List = list_createList();
-        cJSON* VarJSON;
-        keyValuePair_t *localMapKeyPair;
-        cJSON_ArrayForEach(VarJSON, {{{name}}}) {
-            char* localVarJSONToChar = cJSON_Print(VarJSON);
-            localMapKeyPair = keyValuePair_create(strdup(VarJSON->string), localVarJSONToChar);
-            list_addElement({{{name}}}List, localMapKeyPair);
-        }
-        cJSON_Delete(VarJSON);
+        {{/required}}
     {{/isPrimitiveType}}
     {{/isMap}}
     {{/isContainer}}
