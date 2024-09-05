@@ -376,7 +376,7 @@ cJSON *{{classname}}_convertToJSON({{classname}}_t *{{classname}}) {
     {{/isBoolean}}
     {{#isEnum}}
     {{#isString}}
-    if(cJSON_AddStringToObject(item, "{{{baseName}}}", {{{name}}}{{classname}}_ToString({{{classname}}}->{{{name}}})) == NULL)
+    if(cJSON_AddStringToObject(item, "{{{baseName}}}", {{classname}}_{{{name}}}_ToString({{{classname}}}->{{{name}}})) == NULL)
     {
     goto fail; //Enum
     }
@@ -884,7 +884,7 @@ fail:
         {{^isPrimitiveType}}
         {{#isModel}}
         {{#isEnum}}
-        {{^required}}{{{name}}} ? {{/required}}{{{name}}}_local_nonprim_enum{{^required}} : {{projectName}}_{{classVarName}}_{{enumName}}_NULL{{/required}}{{^-last}},{{/-last}}
+        {{^required}}{{{name}}} ? {{/required}}{{{name}}}_local_nonprim_enum{{^required}} : -1{{/required}}{{^-last}},{{/-last}}
         {{/isEnum}}
         {{^isEnum}}
         {{^required}}{{{name}}} ? {{/required}}{{{name}}}_local_nonprim{{^required}} : NULL{{/required}}{{^-last}},{{/-last}}
@@ -914,7 +914,7 @@ fail:
         {{/isBoolean}}
         {{#isEnum}}
         {{#isString}}
-        {{^required}}{{{name}}} ? {{/required}}{{name}}Variable{{^required}} : {{projectName}}_{{classVarName}}_{{enumName}}_NULL{{/required}}{{^-last}},{{/-last}}
+        {{^required}}{{{name}}} ? {{/required}}{{name}}Variable{{^required}} : -1{{/required}}{{^-last}},{{/-last}}
         {{/isString}}
         {{/isEnum}}
         {{^isEnum}}
