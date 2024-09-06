@@ -364,8 +364,20 @@ end:
     {{#returnTypeIsPrimitive}}
     {{#returnSimpleType}}
     //primitive return type simple
-    {{returnType}}* elementToReturn =  strdup(({{returnType}}*)apiClient->dataReceived);
-
+    #define {{{classname}}}_{{{operationId}}}_{{returnType}} 1
+    #if defined({{{classname}}}_{{{operationId}}}_char)
+        {{returnType}}* elementToReturn = strdup(apiClient->dataReceived);
+    #elif defined({{{classname}}}_{{{operationId}}}_binary_t)
+        {{returnType}}* elementToReturn = malloc(sizeof(struct {{returnType}}));
+        elementToReturn->data = apiClient->dataReceived;
+        elementToReturn->len = apiClient->dataReceivedLen;
+        apiClient->dataReceived = NULL;
+        apiClient->dataReceivedLen = 0;
+    #else
+        {{returnType}}* elementToReturn = malloc(sizeof({{returnType}}));
+        {{returnType}}* src = apiClient->dataReceived;
+        *elementToReturn = *src;
+    #endif
     {{/returnSimpleType}}
     {{^returnSimpleType}}
     //primitive return type not simple
