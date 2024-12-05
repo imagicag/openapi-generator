@@ -325,7 +325,14 @@ void {{classname}}_free({{classname}}_t *{{classname}}) {
         list_ForEach(listEntry, {{classname}}->{{name}}) {
             keyValuePair_t *localKeyValue = (keyValuePair_t*) listEntry->data;
             free (localKeyValue->key);
+        {{#items}}
+        {{#isFreeFormObject}}
+            cJSON_Delete (localKeyValue->value);
+        {{/isFreeFormObject}}
+        {{^isFreeFormObject}}
             free (localKeyValue->value);
+        {{/isFreeFormObject}}
+        {{/items}}
             keyValuePair_free(localKeyValue);
         }
         list_freeList({{classname}}->{{name}});

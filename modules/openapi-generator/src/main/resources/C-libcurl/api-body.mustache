@@ -368,9 +368,11 @@ end:
     #if defined({{{classname}}}_{{{operationId}}}_char)
         {{returnType}}* elementToReturn = strdup(apiClient->dataReceived);
     #elif defined({{{classname}}}_{{{operationId}}}_binary_t)
-        {{returnType}}* elementToReturn = malloc(sizeof(struct {{returnType}}));
-        elementToReturn->data = apiClient->dataReceived;
-        elementToReturn->len = apiClient->dataReceivedLen;
+        {{returnType}}* elementToReturn = (binary_t*) malloc(sizeof(struct {{returnType}}));
+        if (elementToReturn) {
+            elementToReturn->data = (uint8_t*) apiClient->dataReceived;
+            elementToReturn->len = apiClient->dataReceivedLen;
+        }
         apiClient->dataReceived = NULL;
         apiClient->dataReceivedLen = 0;
     #else
